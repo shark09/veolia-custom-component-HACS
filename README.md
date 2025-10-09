@@ -8,6 +8,14 @@
 [![Project Maintenance][maintenance-shield]][user_profile]
 
 
+> # Ce projet n'est plus maintenu !!!!
+> 
+> # Vous pouvez trouver une alternative ici :
+> # [https://github.com/Jezza34000/homeassistant_veolia](https://github.com/Jezza34000/homeassistant_veolia)
+
+
+
+
 ![logo][logoimg]
 
 **Ce composant configurera les plates-formes suivantes.**

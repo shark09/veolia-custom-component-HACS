@@ -102,8 +102,9 @@ class VeoliaDataUpdateCoordinator(DataUpdateCoordinator):
         statistic_id = f"{DOMAIN}:water_consumption_{self.entry.entry_id}"
 
         # Metadata for the statistic
+        # mean_type: 0=no mean, 1=arithmetic mean, 2=circular mean
         metadata = StatisticMetaData(
-            has_mean=False,
+            mean_type=0,
             has_sum=True,
             name="Veolia Water Consumption",
             source=DOMAIN,

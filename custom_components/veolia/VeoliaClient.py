@@ -1,7 +1,7 @@
 """API Program for Veolia."""
 
 from copy import deepcopy as copy
-from datetime import datetime, timedelta
+from datetime import datetime
 import logging
 import operator
 import xml.etree.ElementTree as ET
@@ -148,21 +148,17 @@ class VeoliaClient:
                     if isinstance(lstindex, list):
                         lstindex.sort(key=operator.itemgetter("dateReleve"), reverse=True)
                         for val in lstindex:
-                            # dateReleve is the reading date (J+1), subtract 1 day to get actual consumption date
-                            consumption_date = datetime.strptime(val["dateReleve"], FORMAT_DATE).date() - timedelta(days=1)
                             self.attributes[period][HISTORY].append(
                                 (
-                                    consumption_date,
+                                    datetime.strptime(val["dateReleve"], FORMAT_DATE).date(),
                                     int(val["consommation"]),
                                 )
                             )
                         self.attributes["last_index"] = int(lstindex[0]["index"]) + int(lstindex[0]["consommation"])
                     elif isinstance(lstindex, dict):
-                        # dateReleve is the reading date (J+1), subtract 1 day to get actual consumption date
-                        consumption_date = datetime.strptime(lstindex["dateReleve"], FORMAT_DATE).date() - timedelta(days=1)
                         self.attributes[period][HISTORY].append(
                             (
-                                consumption_date,
+                                datetime.strptime(lstindex["dateReleve"], FORMAT_DATE).date(),
                                 int(lstindex["consommation"]),
                             )
                         )

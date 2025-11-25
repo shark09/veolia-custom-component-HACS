@@ -2,6 +2,23 @@
 
 All notable changes to this project will be documented in this file.
 
+## v1.4.0
+
+### Fixed
+
+- Dans le dashboard énergie, les données sont remontées à la bonne date.
+- Correction de l'import déprécié `Config` depuis `homeassistant.core_config`
+- Correction du décorateur `decoratorexceptionDebug` pour gérer correctement les fonctions asynchrones avec `await`
+- Correction de l'appel aux statistiques du recorder : utilisation de `self.hass.async_add_executor_job` au lieu de `get_instance().async_add_executor_job`
+- Correction du format `statistic_id` pour respecter les exigences de Home Assistant (caractères alphanumériques uniquement)
+- Ajout du paramètre `unit_class` dans `StatisticMetaData` pour la compatibilité avec Home Assistant 2026.11
+- Amélioration des logs pour faciliter le débogage
+
+### Changed
+
+- Nettoyage des imports inutilisés (`get_instance`, `statistics_during_period`)
+- Sanitisation robuste du `statistic_id` basé sur l'ABO_ID
+
 ## v1.3.1
 
 ### Changed

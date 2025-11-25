@@ -1,22 +1,12 @@
 # Veolia
 
-[![GitHub Release][releases-shield]][releases]
-[![GitHub Activity][commits-shield]][commits]
-[![License][license-shield]](LICENSE)
-
-[![hacs][hacsbadge]][hacs]
-[![Project Maintenance][maintenance-shield]][user_profile]
-
-
-> # Ce projet n'est plus maintenu !!!!
-> 
-> # Vous pouvez trouver une alternative ici :
-> # [https://github.com/Jezza34000/homeassistant_veolia](https://github.com/Jezza34000/homeassistant_veolia)
-
-
-
-
 ![logo][logoimg]
+
+Ce projet est un fork de [https://github.com/kugan49/veolia-custom-component-HACS](https://github.com/kugan49/veolia-custom-component-HACS) qui n'est plus maintenu.
+
+Il existe pour les clients disposants du nouveau portail d'un nouveau projet :
+[https://github.com/Jezza34000/homeassistant_veolia](https://github.com/Jezza34000/homeassistant_veolia)
+
 
 **Ce composant configurera les plates-formes suivantes.**
 

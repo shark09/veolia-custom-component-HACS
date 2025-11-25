@@ -6,12 +6,10 @@ import asyncio
 from datetime import datetime, timedelta, timezone
 import logging
 
-from homeassistant.components.recorder import get_instance
 from homeassistant.components.recorder.models import StatisticData, StatisticMetaData
 from homeassistant.components.recorder.statistics import (
     async_add_external_statistics,
     get_last_statistics,
-    statistics_during_period,
 )
 from homeassistant.config_entries import ConfigEntry
 from homeassistant.const import UnitOfVolume
@@ -76,15 +74,19 @@ class VeoliaDataUpdateCoordinator(DataUpdateCoordinator):
     async def _async_update_data(self):
         """Update data via library."""
         try:
+            _LOGGER.debug("Starting data update")
             consumption = await self.hass.async_add_executor_job(self.api.update_all)
             _LOGGER.debug(f"consumption = {consumption}")
 
             # Inject historical statistics for the energy dashboard
+            _LOGGER.debug("Inserting statistics")
             await self._async_insert_statistics(consumption)
+            _LOGGER.debug("Statistics inserted successfully")
 
             return consumption
 
         except Exception as exception:
+            _LOGGER.error(f"Error in _async_update_data: {exception}", exc_info=True)
             raise UpdateFailed() from exception
 
     async def _async_insert_statistics(self, consumption: dict):
@@ -98,7 +100,14 @@ class VeoliaDataUpdateCoordinator(DataUpdateCoordinator):
             return
 
         # Get existing statistics to calculate cumulative sum
-        statistic_id = f"{DOMAIN}:water_consumption_{self.entry.entry_id}"
+        # Use abo_id if available, otherwise use a simple fixed ID
+        abo_id = self.entry.data.get(CONF_ABO_ID, "default")
+        # Sanitize: keep only alphanumeric and underscore, convert to lowercase
+        sanitized_id = "".join(c if c.isalnum() or c == "_" else "_" for c in str(abo_id)).lower()
+        # Ensure it starts with a letter
+        if not sanitized_id or not sanitized_id[0].isalpha():
+            sanitized_id = f"meter_{sanitized_id}"
+        statistic_id = f"{DOMAIN}:water_consumption_{sanitized_id}"
 
         # Metadata for the statistic
         # mean_type: 0=no mean, 1=arithmetic mean, 2=circular mean
@@ -109,13 +118,14 @@ class VeoliaDataUpdateCoordinator(DataUpdateCoordinator):
             source=DOMAIN,
             statistic_id=statistic_id,
             unit_of_measurement=UnitOfVolume.LITERS,
+            unit_class="volume",
         )
 
         # Sort history by date ascending for cumulative calculation
         sorted_history = sorted(history, key=lambda x: x[0])
 
         # Get the last recorded statistic to continue the cumulative sum
-        last_stats = await get_instance(self.hass).async_add_executor_job(
+        last_stats = await self.hass.async_add_executor_job(
             get_last_statistics, self.hass, 1, statistic_id, True, {"sum"}
         )
 

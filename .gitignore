@@ -4,3 +4,6 @@ venv
 .venv
 .coverage
 .idea
+.DS_Store
+custom_components/.DS_Store
+custom_components/veolia/.DS_Store

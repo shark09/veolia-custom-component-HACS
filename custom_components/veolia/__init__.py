@@ -6,6 +6,7 @@ import asyncio
 from datetime import datetime, timedelta, timezone
 import logging
 
+from homeassistant.components.recorder import get_instance
 from homeassistant.components.recorder.models import StatisticData, StatisticMetaData
 from homeassistant.components.recorder.statistics import (
     async_add_external_statistics,
@@ -125,7 +126,7 @@ class VeoliaDataUpdateCoordinator(DataUpdateCoordinator):
         sorted_history = sorted(history, key=lambda x: x[0])
 
         # Get the last recorded statistic to continue the cumulative sum
-        last_stats = await self.hass.async_add_executor_job(
+        last_stats = await get_instance(self.hass).async_add_executor_job(
             get_last_statistics, self.hass, 1, statistic_id, True, {"sum"}
         )
 

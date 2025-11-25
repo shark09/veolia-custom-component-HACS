@@ -16,7 +16,6 @@ from homeassistant.components.recorder.statistics import (
 from homeassistant.config_entries import ConfigEntry
 from homeassistant.const import UnitOfVolume
 from homeassistant.core import HomeAssistant
-from homeassistant.core_config import Config
 from homeassistant.exceptions import ConfigEntryNotReady
 from homeassistant.helpers.aiohttp_client import async_get_clientsession
 from homeassistant.helpers.update_coordinator import DataUpdateCoordinator, UpdateFailed
@@ -33,7 +32,7 @@ STATISTIC_ID = f"{DOMAIN}:water_consumption"
 
 
 @decoratorexceptionDebug
-async def async_setup(hass: HomeAssistant, config: Config):
+async def async_setup(hass: HomeAssistant, config: dict):
     """Set up this integration using YAML is not supported."""
     return True
 
